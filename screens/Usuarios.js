@@ -18,8 +18,8 @@ const Usuarios = () => {
     const [modalPassword, setModalPassword] = useState("");
     const [modalRol, setModalRol] = useState("");
 
-    const apiUrlUsuarios = "http://localhost:3000/api/usuarios";
-    const apiUrlRoles = "http://localhost:3000/api/roles";
+    const apiUrlUsuarios = "http://127.0.0.1:3000/api/usuarios";
+    const apiUrlRoles = "http://127.0.0.1:3000/api/roles";
 
     useEffect(() => {
         obtenerRoles();
@@ -235,11 +235,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-start',
         marginTop: "5%",
+        backgroundColor: '#FFF8E1', // Fondo claro amarillo suave
     },
     input: {
-        backgroundColor: "white",
+        backgroundColor: "#FAFAFA",
         width: '90%',
-        borderColor: '#e8e8e8',
+        borderColor: '#e0e0e0',
+        borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
         paddingVertical: 8,
@@ -248,6 +250,9 @@ const styles = StyleSheet.create({
     table: {
         width: '90%',
         marginTop: 20,
+        backgroundColor: '#FFFFFF', // Fondo blanco en tabla para contraste
+        borderRadius: 5,
+        overflow: 'hidden',
     },
     head: {
         height: 50,
@@ -256,21 +261,23 @@ const styles = StyleSheet.create({
     headText: {
         textAlign: "center",
         fontWeight: "bold",
+        color: '#333',
     },
     text: {
         margin: 6,
         textAlign: "center",
+        color: '#333',
     },
     buttonContainer: {
         justifyContent: 'center',
         alignItems: 'center',
     },
-    header:{
+    header: {
         fontSize: 30,
         fontWeight: 'bold',
         textAlign: 'center',
         color: '#333',
-        marginBottom: 60,
+        marginBottom: 40,
     },
     modalContainer: {
         flex: 1,
@@ -280,15 +287,21 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: '80%',
-        backgroundColor: 'white',
+        backgroundColor: '#FFFFFF',
         borderRadius: 10,
         padding: 20,
         alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 5,
+        elevation: 5,
     },
     modalTitle: {
         fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
+        color: '#007bff',
     },
     closeButton: {
         marginTop: 20,

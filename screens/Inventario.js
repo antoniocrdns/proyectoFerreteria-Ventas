@@ -2,70 +2,59 @@ import React, { useState, useEffect } from "react";
 import { View, TextInput, StyleSheet, ScrollView, Text, TouchableOpacity, FlatList, Switch } from "react-native";
 import axios from 'axios';
 
-// URL base de la API para gestionar los productos
-const BASE_URL = "http://127.0.0.1:3000/api/productos"; // Asegúrate de usar la dirección IP correcta
+const BASE_URL = "http://127.0.0.1:3000/api/productos";
 
 const Inventario = () => {
-    // Definición de los estados del componente
-    const [productos, setProductos] = useState([]); // Lista de productos
-    const [editando, setEditando] = useState(null); // ID del producto que se está editando
-    const [mostrarFormulario, setMostrarFormulario] = useState(false); // Controla la visibilidad del formulario
-    const [id, setId] = useState(''); // Estado para el ID del producto
-    const [nombre, setNombre] = useState(''); // Estado para el nombre del producto
-    const [proveedor, setProveedor] = useState(''); // Estado para el proveedor del producto
-    const [precio, setPrecio] = useState(''); // Estado para el precio del producto
-    const [cantidad, setCantidad] = useState(''); // Estado para la cantidad del producto
-    const [activo, setActivo] = useState(true); // Estado para el estado activo del producto
+    const [productos, setProductos] = useState([]);
+    const [editando, setEditando] = useState(null);
+    const [mostrarFormulario, setMostrarFormulario] = useState(false);
+    const [id, setId] = useState('');
+    const [nombre, setNombre] = useState('');
+    const [proveedor, setProveedor] = useState('');
+    const [precio, setPrecio] = useState('');
+    const [cantidad, setCantidad] = useState('');
+    const [activo, setActivo] = useState(true);
 
-    // Hook que se ejecuta al montar el componente
     useEffect(() => {
-        obtenerProductos(); // Llama a la función para obtener los productos
+        obtenerProductos();
     }, []);
 
-    // Función para obtener la lista de productos desde la API
     const obtenerProductos = async () => {
         try {
-            const response = await axios.get(BASE_URL); // Realiza la solicitud GET
-            setProductos(response.data); // Actualiza el estado con la lista de productos
+            const response = await axios.get(BASE_URL);
+            setProductos(response.data);
         } catch (error) {
-            console.error(error); // Maneja errores
+            console.error(error);
         }
     };
 
-    // Función para registrar un nuevo producto
     const registrarProducto = async () => {
         try {
-            const producto = { id, nombre, proveedor, precio, cantidad, activo: activo ? 1 : 0 }; // Crea un objeto con los datos del producto
-            await axios.post(BASE_URL, producto, { // Realiza la solicitud POST
-                headers: {
-                    'Content-Type': 'application/json', // Establece el tipo de contenido
-                },
+            const producto = { id, nombre, proveedor, precio, cantidad, activo: activo ? 1 : 0 };
+            await axios.post(BASE_URL, producto, {
+                headers: { 'Content-Type': 'application/json' },
             });
-            setMostrarFormulario(false); // Oculta el formulario
-            obtenerProductos(); // Actualiza la lista de productos
+            setMostrarFormulario(false);
+            obtenerProductos();
         } catch (error) {
-            console.error(error); // Maneja errores
+            console.error(error);
         }
     };
 
-    // Función para actualizar un producto existente
     const actualizarProducto = async (producto) => {
         try {
-            await axios.put(`${BASE_URL}/${producto.id}`, producto, { // Realiza la solicitud PUT
-                headers: {
-                    'Content-Type': 'application/json', // Establece el tipo de contenido
-                },
+            await axios.put(`${BASE_URL}/${producto.id}`, producto, {
+                headers: { 'Content-Type': 'application/json' },
             });
-            setEditando(null); // Resetea el estado de edición
-            obtenerProductos(); // Actualiza la lista de productos
+            setEditando(null);
+            obtenerProductos();
         } catch (error) {
-            console.error(error); // Maneja errores
+            console.error(error);
         }
     };
 
-    // Función para renderizar cada producto en la lista
     const renderItem = ({ item }) => {
-        if (editando === item.id) { // Si se está editando el producto actual
+        if (editando === item.id) {
             return (
                 <View style={styles.productItem}>
                     <TextInput 
@@ -106,7 +95,7 @@ const Inventario = () => {
                     </TouchableOpacity>
                 </View>
             );
-        } else { // Si no se está editando
+        } else {
             return (
                 <View style={styles.productItem}>
                     <Text style={styles.productText}>{item.nombre}</Text>
@@ -123,13 +112,13 @@ const Inventario = () => {
     };
 
     return (
-        <ScrollView>
-            <View style={styles.container}>
+        <ScrollView style={styles.container}>
+            <View>
                 <Text style={styles.header}>Inventario de Productos</Text>
                 <TouchableOpacity style={styles.addButton} onPress={() => setMostrarFormulario(!mostrarFormulario)}>
                     <Text style={styles.buttonText}>Añadir Producto</Text>
                 </TouchableOpacity>
-                {mostrarFormulario && ( // Si se debe mostrar el formulario
+                {mostrarFormulario && (
                     <View style={styles.section}>
                         <Text style={styles.sectionHeader}>Registrar Producto</Text>
                         <TextInput 
@@ -137,7 +126,6 @@ const Inventario = () => {
                             placeholder="ID Producto" 
                             value={id} 
                             onChangeText={setId}
-                            keyboardType="default"
                         />
                         <TextInput 
                             style={styles.input} 
@@ -187,12 +175,11 @@ const Inventario = () => {
     );
 };
 
-// Estilos del componente
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#f8f9fa',
+        backgroundColor: '#FFF8E1', // Fondo claro
     },
     header: {
         fontSize: 24,
@@ -203,7 +190,7 @@ const styles = StyleSheet.create({
     },
     section: {
         marginBottom: 30,
-        backgroundColor: '#fff',
+        backgroundColor: '#FFFFFF',
         padding: 20,
         borderRadius: 10,
         shadowColor: '#000',
@@ -220,11 +207,12 @@ const styles = StyleSheet.create({
     },
     input: {
         height: 40,
-        borderColor: '#ddd',
+        borderColor: '#DDD',
         borderWidth: 1,
         borderRadius: 5,
         marginBottom: 10,
         paddingLeft: 10,
+        backgroundColor: '#FAFAFA',
     },
     addButton: {
         backgroundColor: '#28a745',
@@ -248,11 +236,11 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     buttonText: {
-        color: '#fff',
+        color: '#FFFFFF',
         fontWeight: 'bold',
     },
     productItem: {
-        backgroundColor: '#fff',
+        backgroundColor: '#FFFFFF',
         padding: 15,
         marginBottom: 10,
         borderRadius: 5,
@@ -265,6 +253,7 @@ const styles = StyleSheet.create({
     productText: {
         fontSize: 16,
         marginBottom: 5,
+        color: '#333',
     },
     switchContainer: {
         flexDirection: 'row',

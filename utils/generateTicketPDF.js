@@ -2,12 +2,6 @@ import { jsPDF } from 'jspdf';
 import { Alert, Platform } from 'react-native';
 import * as FileSystem from 'expo-file-system';
 
-/**
- * Genera un PDF en formato de ticket y lo guarda en el sistema de archivos (móvil) o descarga en la web.
- * @param {Object} ticketData - Los datos del ticket que incluyen el total y una lista de productos.
- * @param {number} ticketData.total - El total de la compra.
- * @param {Array} ticketData.productos - Lista de productos en el ticket.
- */
 const generateTicketPDF = async (ticketData) => {
     const { productos, total } = ticketData;
     const IVA_TASA = 0.08; // 8%
@@ -17,12 +11,13 @@ const generateTicketPDF = async (ticketData) => {
 
     const doc = new jsPDF();
 
-    // Título del ticket
+    // Título del ticket con líneas separadoras
     doc.setFontSize(18);
     doc.text('Ticket de Compra', 20, 20);
+    doc.line(10, 25, 200, 25); // Línea debajo del título
 
     // Detalles de los productos
-    let yPosition = 40;
+    let yPosition = 35;
     productos.forEach((producto, index) => {
         doc.setFontSize(10);
         doc.text(`Producto ${index + 1}: ${producto.nombre || 'N/A'}`, 20, yPosition);
@@ -35,7 +30,11 @@ const generateTicketPDF = async (ticketData) => {
         yPosition += 10; // Espacio entre productos
     });
 
-    // Subtotal, IVA
+    // Línea debajo de la lista de productos
+    doc.line(10, yPosition - 4, 200, yPosition - 4);
+    yPosition += 6;
+
+    // Subtotal, IVA y Total
     doc.setFontSize(12);
     doc.text(`Subtotal: $${subtotal.toFixed(2)}`, 20, yPosition);
     yPosition += 6;
