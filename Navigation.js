@@ -65,7 +65,6 @@ return (
             }}
         />
         <Tab.Screen 
-<<<<<<< HEAD
             name="Usuario" 
             component={Usuarios}
             options={{
@@ -74,25 +73,6 @@ return (
                     
                     <MaterialCommunityIcons  name="numeric-4" color={color} size={30} />
                 ),
-=======
-            name="Registro" 
-            component={Registro}
-            options={{
-                tabBarLabel: 'Registro',
-                tabBarIcon: ({ color, size }) => (
-
-               <MaterialCommunityIcons  name="numeric-4" color={color} size={30} />
-           ),
-           
-       }}
-   />
-        <Tab.Screen 
-        name="Usuario" 
-        component={Usuarios}
-        options={{
-            tabBarLabel: 'Usuario',
-            tabBarIcon: ({ color, size }) => (
->>>>>>> a6bb3a5fdf15585ccfd648f74cb54150c5b4f1ab
                 
             }}
         />
