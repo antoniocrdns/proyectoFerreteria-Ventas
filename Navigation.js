@@ -7,6 +7,7 @@ import {NavigationContainer} from "@react-navigation/native";
 
 import Inventario from "./screens/Inventario";
 import Venta from "./screens/Venta";
+import Registro from "./screens/Registro";
 import Usuarios from "./screens/Usuarios";
 import Login from "./screens/Login";
 import Tickets from "./screens/Tickets";
@@ -64,6 +65,7 @@ return (
             }}
         />
         <Tab.Screen 
+<<<<<<< HEAD
             name="Usuario" 
             component={Usuarios}
             options={{
@@ -72,6 +74,25 @@ return (
                     
                     <MaterialCommunityIcons  name="numeric-4" color={color} size={30} />
                 ),
+=======
+            name="Registro" 
+            component={Registro}
+            options={{
+                tabBarLabel: 'Registro',
+                tabBarIcon: ({ color, size }) => (
+
+               <MaterialCommunityIcons  name="numeric-4" color={color} size={30} />
+           ),
+           
+       }}
+   />
+        <Tab.Screen 
+        name="Usuario" 
+        component={Usuarios}
+        options={{
+            tabBarLabel: 'Usuario',
+            tabBarIcon: ({ color, size }) => (
+>>>>>>> a6bb3a5fdf15585ccfd648f74cb54150c5b4f1ab
                 
             }}
         />
