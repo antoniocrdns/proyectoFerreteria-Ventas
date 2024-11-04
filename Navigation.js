@@ -9,6 +9,7 @@ import Inventario from "./screens/Inventario";
 import Venta from "./screens/Venta";
 import Usuarios from "./screens/Usuarios";
 import Login from "./screens/Login";
+import Tickets from "./screens/Tickets";
 
 
 
@@ -63,17 +64,29 @@ return (
             }}
         />
         <Tab.Screen 
-        name="Usuario" 
-        component={Usuarios}
-        options={{
-            tabBarLabel: 'Usuario',
-            tabBarIcon: ({ color, size }) => (
+            name="Usuario" 
+            component={Usuarios}
+            options={{
+                tabBarLabel: 'Usuario',
+                tabBarIcon: ({ color, size }) => (
+                    
+                    <MaterialCommunityIcons  name="numeric-4" color={color} size={30} />
+                ),
                 
-                <MaterialCommunityIcons  name="numeric-4" color={color} size={30} />
-            ),
-            
-        }}
-    />
+            }}
+        />
+        <Tab.Screen 
+            name="Tickets" 
+            component={Tickets}
+            options={{
+                tabBarLabel: 'Tickets',
+                tabBarIcon: ({ color, size }) => (
+                    
+                    <MaterialCommunityIcons  name="numeric-5" color={color} size={30} />
+                ),
+                
+            }}
+        />
     </Tab.Navigator>
     );
 }
