@@ -1,134 +1,132 @@
-import React from "react";
+import React, { useContext } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import {NavigationContainer} from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
+import { AuthContext } from "./utils/AuthContext";
+import { AuthProvider } from "./utils/AuthContext";
 
-//screens
-
+// Screens
 import Inventario from "./screens/Inventario";
 import Venta from "./screens/Venta";
-<<<<<<< HEAD
-import Usuarios from "./screens/Usuarios";
-import Login from "./screens/Login";
-=======
-import Registro from "./screens/Registro";
 import Usuarios from "./screens/Usuarios";
 import Login from "./screens/Login";
 import Tickets from "./screens/Tickets";
->>>>>>> upstream/main
-
-
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
-const HomeStackNavigator = createNativeStackNavigator();
-
-
-
 
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
-return (
-    <Tab.Navigator
-        initialRouteName="Login"
-        screenOptions= {{
-            tabBarActiveTintColor: 'purple',
-        }}
-    >
-        <Tab.Screen 
-            name="Login" 
-            component={Login} 
-            options={{
-                tabBarLabel: 'Login',
-                tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="numeric-1" color={color} size={30} />
-                ),
-                
+    const { userRole } = useContext(AuthContext);
+
+    return (
+        <Tab.Navigator
+            initialRouteName="Login"
+            screenOptions={{
+                tabBarActiveTintColor: 'purple',
             }}
-        />
-<<<<<<< HEAD
-         <Tab.Screen 
-                name="Inventario" 
-                component={Inventario} 
-                options={{
-                    tabBarLabel: 'Inventario',
-                    tabBarIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name="numeric-2" color={color} size={30} />
-                    ),
-                }}
-            />
-=======
-        <Tab.Screen 
-            name="Inventario" 
-            component={Inventario}
-            options={{
-                tabBarLabel: 'Inventario',
-                tabBarIcon: ({ color, size }) => (
-                    <MaterialCommunityIcons name="numeric-2" color={color} size={30} />
-                ),
-            }}
-        />
->>>>>>> upstream/main
-        <Tab.Screen 
-            name="Venta" 
-            component={Venta}
-            options={{
-                tabBarLabel: 'Venta',
-                tabBarIcon: ({ color, size }) => (
-                    
-                    <MaterialCommunityIcons  name="numeric-3" color={color} size={30} />
-                ),
-                
-            }}
-        />
-        <Tab.Screen 
-<<<<<<< HEAD
-        name="Usuario" 
-        component={Usuarios}
-        options={{
-            tabBarLabel: 'Usuario',
-            tabBarIcon: ({ color, size }) => (
-                
-                <MaterialCommunityIcons  name="numeric-4" color={color} size={30} />
-            ),
-            
-        }}
-    />
-=======
-            name="Usuario" 
-            component={Usuarios}
-            options={{
-                tabBarLabel: 'Usuario',
-                tabBarIcon: ({ color, size }) => (
-                    
-                    <MaterialCommunityIcons  name="numeric-4" color={color} size={30} />
-                ),
-                
-            }}
-        />
-        <Tab.Screen 
-            name="Tickets" 
-            component={Tickets}
-            options={{
-                tabBarLabel: 'Tickets',
-                tabBarIcon: ({ color, size }) => (
-                    
-                    <MaterialCommunityIcons  name="numeric-5" color={color} size={30} />
-                ),
-                
-            }}
-        />
->>>>>>> upstream/main
-    </Tab.Navigator>
+        >
+            {!userRole && (
+                <Tab.Screen 
+                    name="Login" 
+                    component={Login} 
+                    options={{
+                        tabBarLabel: 'Login',
+                        tabBarIcon: ({ color }) => (
+                            <MaterialCommunityIcons name="login" color={color} size={30} />
+                        ),
+                    }}
+                />
+            )}
+            {userRole === 1 && (
+                <>
+                    <Tab.Screen 
+                        name="Inventario" 
+                        component={Inventario} 
+                        options={{
+                            tabBarLabel: 'Inventario',
+                            tabBarIcon: ({ color }) => (
+                                <MaterialCommunityIcons name="warehouse" color={color} size={30} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen 
+                        name="Venta" 
+                        component={Venta}
+                        options={{
+                            tabBarLabel: 'Venta',
+                            tabBarIcon: ({ color }) => (
+                                <MaterialCommunityIcons name="cart" color={color} size={30} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen 
+                        name="Usuario" 
+                        component={Usuarios}
+                        options={{
+                            tabBarLabel: 'Usuarios',
+                            tabBarIcon: ({ color }) => (
+                                <MaterialCommunityIcons name="account-group" color={color} size={30} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen 
+                        name="Tickets" 
+                        component={Tickets}
+                        options={{
+                            tabBarLabel: 'Tickets',
+                            tabBarIcon: ({ color }) => (
+                                <MaterialCommunityIcons name="ticket" color={color} size={30} />
+                            ),
+                        }}
+                    />
+                </>
+            )}
+            {userRole === 2 && (
+                <>
+                    <Tab.Screen 
+                        name="Venta" 
+                        component={Venta}
+                        options={{
+                            tabBarLabel: 'Venta',
+                            tabBarIcon: ({ color }) => (
+                                <MaterialCommunityIcons name="cart" color={color} size={30} />
+                            ),
+                        }}
+                    />
+                    <Tab.Screen 
+                        name="Tickets" 
+                        component={Tickets}
+                        options={{
+                            tabBarLabel: 'Tickets',
+                            tabBarIcon: ({ color }) => (
+                                <MaterialCommunityIcons name="ticket" color={color} size={30} />
+                            ),
+                        }}
+                    />
+                </>
+            )}
+            {userRole === 3 && (
+                <Tab.Screen 
+                    name="Inventario" 
+                    component={Inventario}
+                    options={{
+                        tabBarLabel: 'Inventario',
+                        tabBarIcon: ({ color }) => (
+                            <MaterialCommunityIcons name="warehouse" color={color} size={30} />
+                        ),
+                    }}
+                />
+            )}
+        </Tab.Navigator>
     );
 }
 
-
 export default function Navigation() {
-return (
-    <NavigationContainer>
-    <MyTabs />
-    </NavigationContainer>
-);
+    return (
+        <AuthProvider>
+            <NavigationContainer>
+                <MyTabs />
+            </NavigationContainer>
+        </AuthProvider>
+    );
 }

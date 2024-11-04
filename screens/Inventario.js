@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from "react";
 import { View, TextInput, StyleSheet, ScrollView, Text, TouchableOpacity, FlatList, Switch } from "react-native";
 import axios from 'axios';
@@ -73,36 +72,36 @@ const Inventario = () => {
                         style={styles.input} 
                         placeholder="Nombre Producto" 
                         value={item.nombre} 
-                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, nombre: text } : p))} // Actualiza el nombre del producto
+                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, nombre: text } : p))}
                     />
                     <TextInput 
                         style={styles.input} 
                         placeholder="Proveedor" 
                         value={item.proveedor} 
-                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, proveedor: text } : p))} // Actualiza el proveedor del producto
+                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, proveedor: text } : p))}
                     />
                     <TextInput 
                         style={styles.input} 
                         placeholder="Precio" 
                         value={item.precio.toString()} 
-                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, precio: parseFloat(text) } : p))} // Actualiza el precio del producto
+                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, precio: parseFloat(text) } : p))}
                         keyboardType="numeric"
                     />
                     <TextInput 
                         style={styles.input} 
                         placeholder="Cantidad" 
                         value={item.cantidad.toString()} 
-                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, cantidad: parseInt(text) } : p))} // Actualiza la cantidad del producto
+                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, cantidad: parseInt(text) } : p))}
                         keyboardType="numeric"
                     />
                     <View style={styles.switchContainer}>
                         <Text style={styles.switchLabel}>Activo</Text>
                         <Switch
-                            value={item.activo} // Estado del switch para activo
-                            onValueChange={(value) => setProductos(productos.map(p => p.id === item.id ? { ...p, activo: value } : p))} // Actualiza el estado activo del producto
+                            value={item.activo}
+                            onValueChange={(value) => setProductos(productos.map(p => p.id === item.id ? { ...p, activo: value } : p))}
                         />
                     </View>
-                    <TouchableOpacity style={styles.saveButton} onPress={() => actualizarProducto(item)}> // Botón para guardar cambios
+                    <TouchableOpacity style={styles.saveButton} onPress={() => actualizarProducto(item)}> 
                         <Text style={styles.buttonText}>Guardar</Text>
                     </TouchableOpacity>
                 </View>
@@ -115,7 +114,7 @@ const Inventario = () => {
                     <Text style={styles.productText}>Precio: ${item.precio}</Text>
                     <Text style={styles.productText}>Cantidad: {item.cantidad}</Text>
                     <Text style={styles.productText}>Activo: {item.activo ? 'Sí' : 'No'}</Text>
-                    <TouchableOpacity style={styles.editButton} onPress={() => setEditando(item.id)}> // Botón para editar el producto
+                    <TouchableOpacity style={styles.editButton} onPress={() => setEditando(item.id)}>
                         <Text style={styles.buttonText}>Editar</Text>
                     </TouchableOpacity>
                 </View>
@@ -127,8 +126,8 @@ const Inventario = () => {
         <ScrollView>
             <View style={styles.container}>
                 <Text style={styles.header}>Inventario de Productos</Text>
-                <TouchableOpacity style={styles.addButton} onPress={() => setMostrarFormulario(!mostrarFormulario)}> // Botón para mostrar/ocultar el formulario
-                    <Text style={styles.buttonText}>Registrar Producto</Text>
+                <TouchableOpacity style={styles.addButton} onPress={() => setMostrarFormulario(!mostrarFormulario)}>
+                    <Text style={styles.buttonText}>Añadir Producto</Text>
                 </TouchableOpacity>
                 {mostrarFormulario && ( // Si se debe mostrar el formulario
                     <View style={styles.section}>
@@ -137,51 +136,51 @@ const Inventario = () => {
                             style={styles.input} 
                             placeholder="ID Producto" 
                             value={id} 
-                            onChangeText={setId} // Actualiza el estado del ID
+                            onChangeText={setId}
                             keyboardType="default"
                         />
                         <TextInput 
                             style={styles.input} 
                             placeholder="Nombre Producto" 
                             value={nombre} 
-                            onChangeText={setNombre} // Actualiza el estado del nombre
+                            onChangeText={setNombre}
                         />
                         <TextInput 
                             style={styles.input} 
                             placeholder="Proveedor" 
                             value={proveedor} 
-                            onChangeText={setProveedor} // Actualiza el estado del proveedor
+                            onChangeText={setProveedor}
                         />
                         <TextInput 
                             style={styles.input} 
                             placeholder="Precio" 
                             value={precio} 
-                            onChangeText={setPrecio} // Actualiza el estado del precio
+                            onChangeText={setPrecio}
                             keyboardType="numeric"
                         />
                         <TextInput 
                             style={styles.input} 
                             placeholder="Cantidad" 
                             value={cantidad} 
-                            onChangeText={setCantidad} // Actualiza el estado de la cantidad
+                            onChangeText={setCantidad}
                             keyboardType="numeric"
                         />
                         <View style={styles.switchContainer}>
                             <Text style={styles.switchLabel}>Activo</Text>
                             <Switch
-                                value={activo} // Estado del switch para activo
-                                onValueChange={setActivo} // Actualiza el estado activo
+                                value={activo} 
+                                onValueChange={setActivo}
                             />
                         </View>
-                        <TouchableOpacity style={styles.saveButton} onPress={registrarProducto}> // Botón para registrar el nuevo producto
+                        <TouchableOpacity style={styles.saveButton} onPress={registrarProducto}>
                             <Text style={styles.buttonText}>Registrar Producto</Text>
                         </TouchableOpacity>
                     </View>
                 )}
                 <FlatList
-                    data={productos} // Lista de productos a mostrar
-                    keyExtractor={(item) => item.id.toString()} // Clave única para cada elemento
-                    renderItem={renderItem} // Función para renderizar cada elemento
+                    data={productos}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={renderItem}
                 />
             </View>
         </ScrollView>
@@ -278,54 +277,3 @@ const styles = StyleSheet.create({
 });
 
 export default Inventario;
-=======
-import React from "react";
-import { View, TextInput,StyleSheet , Button, ScrollView} from "react-native";
-import { useNavigation } from "@react-navigation/native";
-
-const Inventario = () => {
-
-    const navigation = useNavigation();
-    
-    
-    return (
-        <ScrollView>
-        <View style={styles.container}>
-        <TextInput style={styles.input} placeholder="Nombre Producto"/>
-        <TextInput style={styles.input} placeholder="Proveedor"/>
-        <TextInput style={styles.input} placeholder="Precio"/>
-        <TextInput style={styles.input} placeholder="Cantidad"/>
-        <TextInput style={styles.input} placeholder="Codigo"/>
-
-        <Button  title="Registrar Producto"/>
-        <TextInput style={styles.input} placeholder="Id Producto"/>
-        <TextInput style={styles.input} placeholder="Codigo"/>
-        <TextInput style={styles.input} placeholder="¿Esta disponible?"/>
-
-        <Button  title="Actualizar"/>
-
-        <Button  title="Ver lista"/>
-    </View>
-    </ScrollView>
-);
-}
-const styles = StyleSheet.create({
-    container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'flex-start',
-    marginTop:"10%"
-    },
-    input:{
-        backgroundColor:"white",
-        width:'90%',
-        borderColor:'#e8e8e8',
-        borderWidth:1,
-        borderRadius:5,
-        paddingHorizontal:10,
-        marginVertical:5
-    },
-    
-    });
-export default Inventario;
->>>>>>> upstream/main
