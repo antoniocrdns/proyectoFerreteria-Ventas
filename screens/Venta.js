@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { View, Text, TextInput, Button, FlatList, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, TextInput, Button, FlatList, TouchableOpacity, Alert, StyleSheet } from 'react-native';
 import axios from 'axios';
 import generateTicketPDF from '../utils/generateTicketPDF';
 
 const Venta = () => {
     const [productId, setProductId] = React.useState('');
-    const [products, setProducts] = React. useState([]);
+    const [products, setProducts] = React.useState([]);
     const IVA_RATE = 0.08;
 
     const getProductById = async (id) => {
@@ -74,9 +74,7 @@ const Venta = () => {
 
     const { subtotal, iva, total } = calculateTotals();
 
-    // Función para manejar la creación del ticket
     const handleCreateTicket = async () => {
-
         const ticketData = {
             total: parseFloat(total.toFixed(2)),
             productos: products.map(p => ({
@@ -88,18 +86,16 @@ const Venta = () => {
         };
 
         try {
-            const response = await axios.post('http://localhost:3000/api/tickets', ticketData);
-
+            const response = await axios.post('http://127.0.0.1:3000/api/tickets', ticketData);
             const ticketId = response.data.ticket_id;
 
             await generateTicketPDF(ticketData); // Generar PDF 
-            
+
             Alert.alert('Éxito', `Ticket creado exitosamente con ID: ${ticketId}`);
-            alert(`Ticket creado exitosamente con ID: ${ticketId}`);
+            alert('Éxito', `Ticket creado exitosamente con ID: ${ticketId}`);
 
             setProducts([]);
             setProductId('');
-
         } catch (error) {
             Alert.alert(
                 'Error',
@@ -113,13 +109,13 @@ const Venta = () => {
     };
 
     return (
-        <View style={{ padding: 20 }}>
-            <Text style={{ fontSize: 20, marginBottom: 10 }}>Agregar Producto</Text>
+        <View style={styles.container}>
+            <Text style={styles.title}>Agregar Producto</Text>
             <TextInput
                 placeholder="ID de producto"
                 value={productId}
                 onChangeText={setProductId}
-                style={{ borderWidth: 1, padding: 10, marginBottom: 10 }}
+                style={styles.input}
             />
             <Button title="Añadir Producto" onPress={addProduct} />
 
@@ -127,40 +123,88 @@ const Venta = () => {
                 data={products}
                 keyExtractor={item => item.producto_id}
                 renderItem={({ item }) => (
-                    <View style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        paddingVertical: 10,
-                        borderBottomWidth: 1,
-                    }}>
+                    <View style={styles.productRow}>
                         <Text>{item.producto_id} | {item.nombre}</Text>
                         <Text>Precio: ${item.precio_unitario.toFixed(2)}</Text>
                         <Text>Cantidad: {item.cantidad}</Text>
-                        <View style={{ flexDirection: 'row' }}>
+                        <View style={styles.buttonGroup}>
                             <TouchableOpacity onPress={() => updateQuantity(item.producto_id, 1)}>
-                                <Text style={{ fontSize: 20, marginHorizontal: 5 }}>+</Text>
+                                <Text style={styles.quantityButton}>+</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => updateQuantity(item.producto_id, -1)}>
-                                <Text style={{ fontSize: 20, marginHorizontal: 5 }}>-</Text>
+                                <Text style={styles.quantityButton}>-</Text>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => removeProduct(item.producto_id)}>
-                                <Text style={{ color: 'red', marginHorizontal: 10 }}>Eliminar</Text>
+                                <Text style={styles.removeButton}>Eliminar</Text>
                             </TouchableOpacity>
                         </View>
                     </View>
                 )}
             />
 
-            <View style={{ marginTop: 20 }}>
-                <Text>Subtotal: ${subtotal.toFixed(2)}</Text>
-                <Text>IVA (8%): ${iva.toFixed(2)}</Text>
-                <Text>Total: ${total.toFixed(2)}</Text>
+            <View style={styles.totalsContainer}>
+                <Text style={styles.totalText}>Subtotal: ${subtotal.toFixed(2)}</Text>
+                <Text style={styles.totalText}>IVA (8%): ${iva.toFixed(2)}</Text>
+                <Text style={styles.totalText}>Total: ${total.toFixed(2)}</Text>
             </View>
 
             <Button title="Crear Ticket" onPress={handleCreateTicket} color="#4CAF50" />
         </View>
     );
 };
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#FFF8E1', // Fondo blanco tirando a amarillo claro
+    },
+    title: {
+        fontSize: 20,
+        marginBottom: 10,
+        fontWeight: 'bold',
+        color: '#333',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#DDD',
+        padding: 10,
+        marginBottom: 10,
+        borderRadius: 5,
+        backgroundColor: '#FFFFFF',
+    },
+    productRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#EEE',
+    },
+    buttonGroup: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    quantityButton: {
+        fontSize: 20,
+        marginHorizontal: 5,
+        color: '#333',
+    },
+    removeButton: {
+        color: 'red',
+        marginHorizontal: 10,
+    },
+    totalsContainer: {
+        marginTop: 20,
+        paddingVertical: 10,
+        backgroundColor: '#F5F5F5',
+        borderRadius: 5,
+    },
+    totalText: {
+        fontSize: 16,
+        color: '#333',
+        marginBottom: 5,
+    },
+});
 
 export default Venta;

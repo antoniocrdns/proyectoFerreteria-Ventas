@@ -12,18 +12,25 @@ import Login from "./screens/Login";
 import Tickets from "./screens/Tickets";
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { TouchableOpacity, Text } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
 function MyTabs() {
-    const { userRole } = useContext(AuthContext);
+    const { userRole, logout } = useContext(AuthContext);
 
     return (
         <Tab.Navigator
             initialRouteName="Login"
-            screenOptions={{
-                tabBarActiveTintColor: 'purple',
-            }}
+            screenOptions={({ route }) => ({
+                tabBarActiveTintColor: 'orange',
+                headerRight: () =>
+                    userRole ? (
+                        <TouchableOpacity onPress={logout} style={{ paddingRight: 15 }}>
+                            <MaterialCommunityIcons name="logout" color="orange" size={25} />
+                        </TouchableOpacity>
+                    ) : null,
+            })}
         >
             {!userRole && (
                 <Tab.Screen 
@@ -34,6 +41,7 @@ function MyTabs() {
                         tabBarIcon: ({ color }) => (
                             <MaterialCommunityIcons name="login" color={color} size={30} />
                         ),
+                        headerShown: false, // Ocultar header en la pantalla de Login
                     }}
                 />
             )}
