@@ -179,14 +179,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#FFF8E1', // Fondo claro
+        backgroundColor: '#5c646b', // Fondo claro
     },
     header: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
         marginBottom: 20,
-        textAlign: 'center',
-        color: '#333',
+        color: 'white',
     },
     section: {
         marginBottom: 30,
@@ -203,7 +202,7 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
-        color: '#007bff',
+        color: 'white',
     },
     input: {
         height: 40,
@@ -215,21 +214,21 @@ const styles = StyleSheet.create({
         backgroundColor: '#FAFAFA',
     },
     addButton: {
-        backgroundColor: '#28a745',
+        backgroundColor: '#d17609',
         padding: 10,
         borderRadius: 5,
         marginBottom: 20,
         alignItems: 'center',
     },
     saveButton: {
-        backgroundColor: '#007bff',
+        backgroundColor: '#d17609',
         padding: 10,
         borderRadius: 5,
         marginTop: 10,
         alignItems: 'center',
     },
     editButton: {
-        backgroundColor: '#ffc107',
+        backgroundColor: '#d17609',
         padding: 10,
         borderRadius: 5,
         marginTop: 10,
