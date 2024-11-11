@@ -117,16 +117,16 @@ const Venta = () => {
                 onChangeText={setProductId}
                 style={styles.input}
             />
-            <Button title="Añadir Producto" onPress={addProduct} />
+            <Button  title="Añadir Producto" onPress={addProduct} color="#d17609"  />
 
             <FlatList
                 data={products}
                 keyExtractor={item => item.producto_id}
                 renderItem={({ item }) => (
                     <View style={styles.productRow}>
-                        <Text>{item.producto_id} | {item.nombre}</Text>
-                        <Text>Precio: ${item.precio_unitario.toFixed(2)}</Text>
-                        <Text>Cantidad: {item.cantidad}</Text>
+                        <Text style={styles.TextP}>{item.producto_id} | {item.nombre}</Text>
+                        <Text style={styles.TextP}>Precio: ${item.precio_unitario.toFixed(2)}</Text>
+                        <Text style={styles.TextP}>Cantidad: {item.cantidad}</Text>
                         <View style={styles.buttonGroup}>
                             <TouchableOpacity onPress={() => updateQuantity(item.producto_id, 1)}>
                                 <Text style={styles.quantityButton}>+</Text>
@@ -148,7 +148,7 @@ const Venta = () => {
                 <Text style={styles.totalText}>Total: ${total.toFixed(2)}</Text>
             </View>
 
-            <Button title="Crear Ticket" onPress={handleCreateTicket} color="#4CAF50" />
+            <Button title="Crear Ticket" onPress={handleCreateTicket} color="#d17609" />
         </View>
     );
 };
@@ -157,13 +157,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#FFF8E1', // Fondo blanco tirando a amarillo claro
+        backgroundColor: '#5c646b', // Fondo blanco tirando a amarillo claro
     },
     title: {
         fontSize: 20,
         marginBottom: 10,
         fontWeight: 'bold',
-        color: '#333',
+        color: 'white',
     },
     input: {
         borderWidth: 1,
@@ -188,23 +188,29 @@ const styles = StyleSheet.create({
     quantityButton: {
         fontSize: 20,
         marginHorizontal: 5,
-        color: '#333',
+        color: 'white',
     },
     removeButton: {
         color: 'red',
         marginHorizontal: 10,
+        fontWeight: 'bold',
     },
     totalsContainer: {
         marginTop: 20,
         paddingVertical: 10,
         backgroundColor: '#F5F5F5',
         borderRadius: 5,
+        
     },
     totalText: {
         fontSize: 16,
         color: '#333',
         marginBottom: 5,
+        paddingLeft:10
     },
+    TextP:{
+        color:"white"
+    }
 });
 
 export default Venta;
