@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, StyleSheet, Button, Alert, ScrollView, Modal, TouchableOpacity, Picker } from "react-native";
 import axios from "axios";
 import { Table, Row, Rows } from "react-native-table-component";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const Usuarios = () => {
     const [usuarios, setUsuarios] = useState([]);
@@ -55,10 +56,13 @@ const Usuarios = () => {
                     '******',
                     rolNombre,
                     <View style={styles.buttonContainer}>
-                        <Button title="Editar" onPress={() => abrirModalEdicion(usuario)} />
+                        <MaterialCommunityIcons onPress={() => abrirModalEdicion(usuario)} name="vector-square-edit"size={30} color={"#5ccb5f"} />
+
                     </View>,
                     <View style={styles.buttonContainer}>
-                        <Button title="Borrar" color="red" onPress={() => borrarUsuario(usuario.id)} />
+
+                        <MaterialCommunityIcons onPress={() => borrarUsuario(usuario.id)} name="trash-can"size={30} color={"red"} />
+                    
                     </View>
                 ];
             });
@@ -69,7 +73,7 @@ const Usuarios = () => {
         }
     };
 
-   
+
     const guardarUsuario = async () => {
         if (!username || !password || !rol_id) {
             Alert.alert("Error Todos los campos son obligatorios");
@@ -92,7 +96,7 @@ const Usuarios = () => {
             alert("Error No se pudo guardar el usuario");
         }
     };
-     
+    
     const actualizarUsuario = async () => {
         if (!editingUserId) return;
         try {
@@ -154,7 +158,7 @@ const Usuarios = () => {
     };
 
     return (
-        <ScrollView style={{ flex: 1, backgroundColor: '#FFF8E1' }}>
+        <ScrollView style={{ flex: 1, backgroundColor: '#5c646b' }}>
             <View style={styles.container}>
                 <Text style={styles.header}>Gestión de Usuarios</Text>
 
@@ -187,9 +191,10 @@ const Usuarios = () => {
                 <Button
                     title="Añadir Usuario"
                     onPress={guardarUsuario}
+                    color="#d17609"
                 />
 
-                <Table borderStyle={{ borderWidth: 1, borderColor: '#abb2b9' }} style={styles.table}>
+                <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }} style={styles.table}>
                     <Row
                         data={["Username", "Contraseña", "Rol", "Editar", "Borrar"]}
                         style={styles.head}
@@ -236,7 +241,7 @@ const Usuarios = () => {
                                 ))}
                             </Picker>
                             <View style={styles.modalButtons2}>
-                            <Button title="Guardar Cambios" onPress={actualizarUsuario} />
+                            <Button  style={styles.Boton} title="Guardar Cambios" onPress={actualizarUsuario} color="#d17609"/>
                             <TouchableOpacity onPress={cerrarModal} style={styles.closeButton}>
                                 <Text style={styles.closeButtonText}>Cerrar</Text>
                             </TouchableOpacity>
@@ -259,7 +264,7 @@ const Usuarios = () => {
                                     ¿Estás seguro de que deseas eliminar este usuario?
                                 </Text>
                                 <View style={styles.modalButtons}>
-                                    <Button title="Cancelar" onPress={cancelarBorrado} />
+                                    <Button title="Cancelar" color="#d17609" onPress={cancelarBorrado} />
                                     <Button title="Eliminar" color="red" onPress={confirmarBorrado} />
                                 </View>
                             </View>
@@ -274,14 +279,11 @@ const Usuarios = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        justifyContent: 'flex-start',
-        marginTop: "5%",
-        backgroundColor: '#FFF8E1',  // Fondo claro amarillo suave
+        padding: 20,
+        backgroundColor: '#5c646b',  // Fondo claro amarillo suave
     },
     input: {
         backgroundColor: "#FAFAFA",
-        width: '90%',
         borderColor: '#e0e0e0',
         borderWidth: 1,
         borderRadius: 5,
@@ -292,23 +294,23 @@ const styles = StyleSheet.create({
     table: {
         width: '90%',
         marginTop: 20,
-        backgroundColor: '#FFFFFF',  // Fondo blanco en tabla para contraste
+        backgroundColor: '#5c646b',  // Fondo blanco en tabla para contraste
         borderRadius: 5,
         overflow: 'hidden',
     },
     head: {
         height: 50,
-        backgroundColor: '#d6dbdf',
+        backgroundColor: '#d17609',
     },
     headText: {
         textAlign: "center",
         fontWeight: "bold",
-        color: '#333',
+        color: 'white',
     },
     text: {
         margin: 6,
         textAlign: "center",
-        color: '#333',
+        color: 'white',
     },
     buttonContainer: {
         justifyContent: 'center',
@@ -317,7 +319,7 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#2E3A59',
+        color: 'white',
         marginBottom: 20,
     },
     modalContainer: {
@@ -327,7 +329,7 @@ const styles = StyleSheet.create({
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
     },
     modalContent: {
-        backgroundColor: '#FFF',
+        backgroundColor: '#5c646b',
         padding: 20,
         borderRadius: 10,
         width: '80%',
@@ -336,16 +338,17 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontWeight: 'bold',
         marginBottom: 10,
+        color: 'white',
+        textAlign:"center"
     },
     closeButton: {
         marginTop: 20,
-        backgroundColor: '#FF6347',
-        padding: 10,
-        borderRadius: 5,
+        
     },
     closeButtonText: {
-        color: '#FFF',
+        color: '#d17609',
         fontSize: 16,
+        fontWeight:"bold"
     },
     modalOverlay: {
         flex: 1,
@@ -361,6 +364,8 @@ const styles = StyleSheet.create({
     modalMessage: {
         fontSize: 16,
         marginBottom: 20,
+        color: 'white',
+        textAlign:"center"
     },
     modalButtons2: {
         flex: 1,
