@@ -3,6 +3,9 @@ import { View, TextInput, StyleSheet, TouchableOpacity, Text, Alert, ActivityInd
 import { useNavigation } from "@react-navigation/native";
 import ApiClient, { setAuthToken } from "../utils/ApiClient";
 import { AuthContext } from "../utils/AuthContext";
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+
 
 const Login = () => {
     const [username, setUsername] = useState("");
@@ -38,7 +41,12 @@ const Login = () => {
 
     return (
         <View style={styles.container}>
-            <Image source={require('../assets/icon.png')} style={styles.logo} /> 
+            <View style={styles.buttonContainer}>
+
+                    <MaterialCommunityIcons onPress={() => borrarUsuario(usuario.id)} 
+                    name="account"size={90} color={"black"} />
+
+                            </View>
             <Text style={styles.title}>Bienvenido</Text>
             <TextInput 
                 style={styles.input} 
@@ -66,45 +74,77 @@ const Login = () => {
     );
 };
 
+
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 20,
-        backgroundColor: '#FFF8E1',
+        display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    height: '100vh',
+    padding: '20px',
+    backgroundColor: '#5c646b',
     },
+    
     logo: {
-        width: 120,
+        width: 12,
         height: 120,
         marginBottom: 20,
     },
     title: {
         fontSize: 24,
         fontWeight: 'bold',
-        color: '#333',
+        color: '#dde9f1',
         marginBottom: 30,
     },
     input: {
         backgroundColor: "#FFFFFF",
-        width: '100%',
+    width: '90%',
+    maxWidth: 300,
+    borderColor: '#FF5733',
+    borderWidth: 1,
+    borderRadius: 12,  // Aumenté el radio para que sea más visible
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    marginVertical: 8,
+    fontSize: 16,
+    color: '#333',
+    textAlign: 'center',
+
+    // Sombra ligera para iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+
+    // Sombra para Android
+    elevation: 5,    // Eleva más para una sombra más fuerte
+
+    // Borde redondeado
+    borderRadius: 12,
+           
+    },
+      
+    loginButton: {
+        backgroundColor: '#d17609',
+        width: '90%',           // Ajuste de ancho para mantenerlo compacto
+        maxWidth: 300,          // Máximo ancho en dispositivos grandes
         borderColor: '#ddd',
         borderWidth: 1,
         borderRadius: 8,
-        paddingHorizontal: 15,
-        paddingVertical: 10,
-        marginVertical: 10,
+        paddingHorizontal: 12,  // Relleno más compacto
+        paddingVertical: 8,     // Relleno vertical reducido
+        marginVertical: 8,      // Margen vertical reducido
         fontSize: 16,
         color: '#333',
-    },
-    loginButton: {
-        backgroundColor: '#4CAF50',
-        paddingVertical: 12,
-        paddingHorizontal: 25,
-        borderRadius: 8,
-        width: '100%',
-        alignItems: 'center',
-        marginTop: 20,
+        shadowColor: '#000',    // Sombra ligera (opcional)
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 3,
+        elevation: 2,  
+        alignItems: 'center',          
+        justifyContent: 'center',     
+        
     },
     loginButtonText: {
         color: '#FFFFFF',
@@ -113,7 +153,12 @@ const styles = StyleSheet.create({
     },
     loadingIndicator: {
         marginTop: 20,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 10,
     },
+    
 });
 
 export default Login;
