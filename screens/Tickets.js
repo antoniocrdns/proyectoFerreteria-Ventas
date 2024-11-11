@@ -4,11 +4,33 @@ import axios from "axios";
 
 const Tickets = () => {
     const [tickets, setTickets] = React.useState([]);
+    const [productos, setProductos] = React.useState([]);  // Estado para los productos
     const [page, setPage] = React.useState(1);
     const [loading, setLoading] = React.useState(false);
     const [allLoaded, setAllLoaded] = React.useState(false);
     const [modalVisible, setModalVisible] = React.useState(false);
     const [selectedTicket, setSelectedTicket] = React.useState(null);
+
+
+    const [showCancelModal, setShowCancelModal] = React.useState(false);
+    const [ticketToCancel, setTicketToCancel] = React.useState(null);
+
+    const obtenerProductos = async () => {
+        try {
+            const response = await axios.get('http://127.0.0.1:3000/api/productos');
+            setProductos(response.data.filter(producto => producto.activo)); 
+        } catch (error) {
+            console.error("Error fetching products:", error);
+            Alert.alert("No se pudieron cargar los productos.");
+            alert("No se pudieron cargar los productos.");  // Versión para navegador
+        }
+    };
+
+
+    React.useEffect(() => {
+        obtenerProductos();
+        getTickets(page);
+    }, []);
 
     const getTickets = async (page) => {
         if (loading || allLoaded) return;
@@ -33,7 +55,7 @@ const Tickets = () => {
         } catch (error) {
             console.error("Error fetching tickets:", error);
             Alert.alert("No se pudieron cargar los tickets.");
-            alert("No se pudieron cargar los tickets.");
+            alert("No se pudieron cargar los tickets.");  // Versión para navegador
         } finally {
             setLoading(false);
         }
@@ -42,21 +64,6 @@ const Tickets = () => {
     React.useEffect(() => {
         getTickets(page);
     }, []);
-
-    const cancelTicket = async (ticketId) => {
-        try {
-            await axios.delete(`http://127.0.0.1:3000/api/tickets/${ticketId}`);
-            Alert.alert("Ticket cancelado.");
-            alert("Ticket cancelado.");
-            setTickets(tickets => tickets.map(ticket => 
-                ticket.ticket_id === ticketId ? { ...ticket, cancelada: 1 } : ticket
-            ));
-        } catch (error) {
-            console.error("Error canceling ticket:", error);
-            Alert.alert("No se pudo cancelar el ticket.");
-            alert("No se pudo cancelar el ticket.");
-        }
-    };
 
     const viewTicketContent = (ticket) => {
         setSelectedTicket(ticket);
@@ -68,6 +75,74 @@ const Tickets = () => {
         setSelectedTicket(null);
     };
 
+    // Función para abrir el modal de confirmación de cancelación
+    const openCancelModal = (ticketId) => {
+        setTicketToCancel(ticketId);
+        setShowCancelModal(true);
+    };
+
+    // Función para confirmar la cancelación
+    const confirmCancelTicket = async () => {
+        try {
+            await axios.delete(`http://127.0.0.1:3000/api/tickets/${ticketToCancel}`);
+            Alert.alert("Ticket cancelado.");
+            alert("Ticket cancelado.");  // Versión para navegador
+            setTickets(tickets => tickets.map(ticket => 
+                ticket.ticket_id === ticketToCancel ? { ...ticket, cancelada: 1 } : ticket
+            ));
+        } catch (error) {
+            console.error("Error canceling ticket:", error);
+            Alert.alert("No se pudo cancelar el ticket.");
+            alert("No se pudo cancelar el ticket.");  // Versión para navegador
+        } finally {
+            setShowCancelModal(false);  // Cierra el modal después de la cancelación
+        }
+    };
+
+    const crearTicket = async () => {
+        if (productos.length === 0) {
+            Alert.alert("No se pueden crear tickets", "Debe haber al menos un producto activo en el inventario.");
+            alert("No se pueden crear tickets. Debe haber al menos un producto activo en el inventario.");  // Versión para navegador
+            return;
+        }
+
+        try {
+            const nuevoTicket = {
+                total: calcularTotal(),
+                productos: productos.map(producto => ({
+                    producto_id: producto.id,
+                    cantidad: 1,
+                    precio_unitario: producto.precio
+                }))
+            };
+
+            // Crear la venta (ticket)
+            const response = await axios.post("http://127.0.0.1:3000/api/tickets", {
+                total: nuevoTicket.total
+            });
+
+            const ventaId = response.data.id; // ID del ticket recién creado
+
+            // Crear los detalles de la venta (productos dentro del ticket)
+            await Promise.all(nuevoTicket.productos.map(async (producto) => {
+                await axios.post("http://127.0.0.1:3000/api/detalle_venta", {
+                    venta_id: ventaId,
+                    producto_id: producto.producto_id,
+                    cantidad: producto.cantidad,
+                    precio_unitario: producto.precio_unitario
+                });
+            }));
+
+            Alert.alert("Ticket creado con éxito.");
+            alert("Ticket creado con éxito.");  // Versión para navegador
+        } catch (error) {
+            console.error("Error creating ticket:", error);
+            Alert.alert("No se pudo crear el ticket.");
+            alert("No se pudo crear el ticket.");  // Versión para navegador
+        }
+    };
+
+
     const renderTicketItem = ({ item }) => (
         <View style={styles.ticketItem}>
             <Text style={styles.ticketText}>
@@ -75,7 +150,7 @@ const Tickets = () => {
             </Text>
             <View style={styles.buttonContainer}>
                 {item.cancelada === 0 && (
-                    <TouchableOpacity style={styles.cancelButton} onPress={() => cancelTicket(item.ticket_id)}>
+                    <TouchableOpacity style={styles.cancelButton} onPress={() => openCancelModal(item.ticket_id)}>
                         <Text style={styles.cancelButtonText}>Cancelar</Text>
                     </TouchableOpacity>
                 )}
@@ -150,6 +225,23 @@ const Tickets = () => {
                     </View>
                 </Modal>
             )}
+            {/* Modal para confirmar cancelación */}
+            <Modal
+                transparent={true}
+                visible={showCancelModal}
+                animationType="fade"
+            >
+                <View style={styles.modalOverlay}>
+                    <View style={styles.modalContent}>
+                        <Text style={styles.modalTitle}>CONFIRMACIÓN DE ELIMINACIÓN</Text>
+                        <Text style={styles.modalMessage}>¿Estás seguro de que deseas cancelar este ticket?</Text>
+                        <View style={styles.modalButtons}>
+                            <Button title="Cancelar" onPress={() => setShowCancelModal(false)} color="#d17609" />
+                            <Button title="Confirmar" onPress={confirmCancelTicket} color="red" />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View>
     );
 };
@@ -263,8 +355,24 @@ const styles = StyleSheet.create({
     },
     datosT:{
         color: "white",
-    }
+    },
+    modalOverlay: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 20,
+    },
+    modalMessage: {
+        fontSize: 16,
+        marginBottom: 20,
+        color: 'white',
+        textAlign: "center"
+    },
 });
 
 export default Tickets;
-

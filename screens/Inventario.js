@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, TextInput, StyleSheet, ScrollView, Text, TouchableOpacity, FlatList, Switch } from "react-native";
+import { View, TextInput, StyleSheet, ScrollView, Text, TouchableOpacity, FlatList, Switch, Alert } from "react-native";
 import axios from 'axios';
 
 const BASE_URL = "http://127.0.0.1:3000/api/productos";
@@ -14,6 +14,7 @@ const Inventario = () => {
     const [precio, setPrecio] = useState('');
     const [cantidad, setCantidad] = useState('');
     const [activo, setActivo] = useState(true);
+    const [error, setError] = useState('');
 
     useEffect(() => {
         obtenerProductos();
@@ -25,72 +26,118 @@ const Inventario = () => {
             setProductos(response.data);
         } catch (error) {
             console.error(error);
+            Alert.alert("Error", "No se pudieron cargar los productos.");
         }
     };
 
+    const validarCampos = (producto, esNuevoProducto = true) => {
+        if (esNuevoProducto && !producto.id) {
+            setError("El ID del producto es obligatorio.");
+            return false;
+        }
+        if (!producto.nombre || !producto.proveedor || producto.precio === '' || producto.cantidad === '') {
+            setError("Todos los campos son obligatorios.");
+            return false;
+        }
+        if (isNaN(producto.precio) || isNaN(producto.cantidad)) {
+            setError("Precio y Cantidad deben ser números, además de no poder quedar vacíos.");
+            return false;
+        }
+        if (producto.precio <= 0 || producto.cantidad <= 0) {
+            setError("Precio y Cantidad deben ser mayores que cero.");
+            return false;
+        }
+        if (esNuevoProducto && productos.some(p => p.id === producto.id)) {
+            setError("El ID del producto ya existe.");
+            return false;
+        }
+        setError('');
+        return true;
+    };
+
     const registrarProducto = async () => {
+        const producto = { id, nombre, proveedor, precio: parseFloat(precio), cantidad: parseInt(cantidad), activo: activo ? 1 : 0 };
+        if (!validarCampos(producto)) return;
+
         try {
-            const producto = { id, nombre, proveedor, precio, cantidad, activo: activo ? 1 : 0 };
             await axios.post(BASE_URL, producto, {
                 headers: { 'Content-Type': 'application/json' },
             });
             setMostrarFormulario(false);
             obtenerProductos();
+            Alert.alert("Éxito", "Producto agregado correctamente.");
         } catch (error) {
             console.error(error);
+            Alert.alert("Error", "No se pudo registrar el producto.");
         }
     };
 
-    const actualizarProducto = async (producto) => {
+    const actualizarProducto = async () => {
+        const producto = { id, nombre, proveedor, precio: parseFloat(precio), cantidad: parseInt(cantidad), activo: activo ? 1 : 0 };
+        if (!validarCampos(producto, false)) return;
+
         try {
-            await axios.put(`${BASE_URL}/${producto.id}`, producto, {
+            await axios.put(`${BASE_URL}/${id}`, producto, {
                 headers: { 'Content-Type': 'application/json' },
             });
             setEditando(null);
             obtenerProductos();
+            Alert.alert("Éxito", "Producto actualizado correctamente.");
         } catch (error) {
             console.error(error);
+            Alert.alert("Error", "No se pudo actualizar el producto.");
         }
+    };
+
+    const iniciarEdicion = (producto) => {
+        setId(producto.id);
+        setNombre(producto.nombre);
+        setProveedor(producto.proveedor);
+        setPrecio(producto.precio.toString());
+        setCantidad(producto.cantidad.toString());
+        setActivo(producto.activo === 1);
+        setEditando(producto.id);
     };
 
     const renderItem = ({ item }) => {
         if (editando === item.id) {
             return (
                 <View style={styles.productItem}>
+                    {error ? <Text style={styles.error}>{error}</Text> : null}
                     <TextInput 
                         style={styles.input} 
                         placeholder="Nombre Producto" 
-                        value={item.nombre} 
-                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, nombre: text } : p))}
+                        value={nombre} 
+                        onChangeText={setNombre}
                     />
                     <TextInput 
                         style={styles.input} 
                         placeholder="Proveedor" 
-                        value={item.proveedor} 
-                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, proveedor: text } : p))}
+                        value={proveedor} 
+                        onChangeText={setProveedor}
                     />
                     <TextInput 
                         style={styles.input} 
                         placeholder="Precio" 
-                        value={item.precio.toString()} 
-                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, precio: parseFloat(text) } : p))}
+                        value={precio} 
+                        onChangeText={(text) => setPrecio(text ? parseFloat(text) : '')}
                         keyboardType="numeric"
                     />
                     <TextInput 
                         style={styles.input} 
                         placeholder="Cantidad" 
-                        value={item.cantidad.toString()} 
-                        onChangeText={(text) => setProductos(productos.map(p => p.id === item.id ? { ...p, cantidad: parseInt(text) } : p))}
+                        value={cantidad} 
+                        onChangeText={(text) => setCantidad(text ? parseInt(text) : '')}
                         keyboardType="numeric"
                     />
                     <View style={styles.switchContainer}>
                         <Text style={styles.switchLabel}>Activo</Text>
                         <Switch
-                            value={item.activo}
-                            onValueChange={(value) => setProductos(productos.map(p => p.id === item.id ? { ...p, activo: value } : p))}
+                            value={activo}
+                            onValueChange={setActivo}
                         />
                     </View>
-                    <TouchableOpacity style={styles.saveButton} onPress={() => actualizarProducto(item)}> 
+                    <TouchableOpacity style={styles.saveButton} onPress={actualizarProducto}> 
                         <Text style={styles.buttonText}>Guardar</Text>
                     </TouchableOpacity>
                 </View>
@@ -98,12 +145,13 @@ const Inventario = () => {
         } else {
             return (
                 <View style={styles.productItem}>
+                    <Text style={styles.productText}>ID: {item.id}</Text> {/* Mostrar el ID del producto */}
                     <Text style={styles.productText}>{item.nombre}</Text>
                     <Text style={styles.productText}>Proveedor: {item.proveedor}</Text>
                     <Text style={styles.productText}>Precio: ${item.precio}</Text>
                     <Text style={styles.productText}>Cantidad: {item.cantidad}</Text>
                     <Text style={styles.productText}>Activo: {item.activo ? 'Sí' : 'No'}</Text>
-                    <TouchableOpacity style={styles.editButton} onPress={() => setEditando(item.id)}>
+                    <TouchableOpacity style={styles.editButton} onPress={() => iniciarEdicion(item)}>
                         <Text style={styles.buttonText}>Editar</Text>
                     </TouchableOpacity>
                 </View>
@@ -121,6 +169,7 @@ const Inventario = () => {
                 {mostrarFormulario && (
                     <View style={styles.section}>
                         <Text style={styles.sectionHeader}>Registrar Producto</Text>
+                        {error ? <Text style={styles.error}>{error}</Text> : null}
                         <TextInput 
                             style={styles.input} 
                             placeholder="ID Producto" 
@@ -143,14 +192,14 @@ const Inventario = () => {
                             style={styles.input} 
                             placeholder="Precio" 
                             value={precio} 
-                            onChangeText={setPrecio}
+                            onChangeText={(text) => setPrecio(text ? parseFloat(text) : '')}
                             keyboardType="numeric"
                         />
                         <TextInput 
                             style={styles.input} 
                             placeholder="Cantidad" 
                             value={cantidad} 
-                            onChangeText={setCantidad}
+                            onChangeText={(text) => setCantidad(text ? parseInt(text) : '')}
                             keyboardType="numeric"
                         />
                         <View style={styles.switchContainer}>
@@ -263,5 +312,6 @@ const styles = StyleSheet.create({
         marginRight: 10,
     },
 });
+
 
 export default Inventario;
