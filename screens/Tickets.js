@@ -135,11 +135,11 @@ const Tickets = () => {
                     <View style={styles.modalContainer}>
                         <View style={styles.modalContent}>
                             <Text style={styles.modalTitle}>Contenido del Ticket ID: {selectedTicket.ticket_id}</Text>
-                            <Text>Total: ${selectedTicket.total}</Text>
-                            <Text>Fecha: {new Date(selectedTicket.fecha).toLocaleString()}</Text>
+                            <Text style={styles.datosT}>Total: ${selectedTicket.total}</Text>
+                            <Text style={styles.datosT}>Fecha: {new Date(selectedTicket.fecha).toLocaleString()}</Text>
                             <Text style={styles.productListTitle}>Productos:</Text>
                             {selectedTicket.productos.map(producto => (
-                                <Text key={producto.producto_id}>
+                                <Text style={styles.datosT} key={producto.producto_id}>
                                     - {producto.nombre} (ID: {producto.producto_id})
                                 </Text>
                             ))}
@@ -158,15 +158,13 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: 10,
-        backgroundColor: '#FFF8E1',
+        backgroundColor: '#5c646b',
     },
     sectionTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        color: '#333',
-        paddingVertical: 10,
-        textAlign: 'center',
-        backgroundColor: '#FAFAFA',
+        color: 'white',
+        padding: 20,
     },
     ticketItem: {
         flexDirection: 'row',
@@ -205,7 +203,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     viewButton: {
-        backgroundColor: '#007bff',
+        backgroundColor: '#d17609',
         padding: 8,
         borderRadius: 5,
     },
@@ -215,7 +213,7 @@ const styles = StyleSheet.create({
     },
     loadMoreButton: {
         padding: 15,
-        backgroundColor: '#007bff',
+        backgroundColor: '#d17609',
         alignItems: 'center',
         borderRadius: 5,
         marginVertical: 10,
@@ -233,7 +231,7 @@ const styles = StyleSheet.create({
     },
     modalContent: {
         width: "80%",
-        backgroundColor: "white",
+        backgroundColor: "#5c646b",
         padding: 20,
         borderRadius: 10,
         alignItems: "center",
@@ -247,22 +245,26 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: "bold",
         marginBottom: 10,
-        color: "#333",
+        color: "white",
     },
     productListTitle: {
         fontWeight: "bold",
         marginTop: 10,
+        color: "white",
     },
     closeButton: {
         marginTop: 20,
         padding: 10,
-        backgroundColor: "#007bff",
         borderRadius: 5,
     },
     closeButtonText: {
-        color: "white",
+        color: "#d17609",
         fontWeight: "bold",
     },
+    datosT:{
+        color: "white",
+    }
 });
 
 export default Tickets;
+
