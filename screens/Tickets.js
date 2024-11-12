@@ -317,7 +317,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#5c646b",
         padding: 20,
         borderRadius: 10,
-        alignItems: "center",
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 2 },
         shadowOpacity: 0.1,
@@ -329,6 +328,8 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         marginBottom: 10,
         color: "white",
+        textAlign:"center"
+
     },
     productListTitle: {
         fontWeight: "bold",
@@ -364,6 +365,7 @@ const styles = StyleSheet.create({
         color: 'white',
         textAlign: "center"
     },
+    
 });
 
 export default Tickets;
