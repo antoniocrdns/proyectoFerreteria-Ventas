@@ -14,13 +14,11 @@ const Venta = () => {
             const product = response.data;
 
             if (product.activo !== 1 || product.cantidad <= 0) {
-                Alert.alert('Error', 'Producto inactivo o sin stock disponible');
-                alert('Error', 'Producto inactivo o sin stock disponible');
+                alert('Error. Producto inactivo o sin stock disponible');
                 return null;
             }
             return product;
         } catch (error) {
-            Alert.alert('Error', error.response?.data?.message || 'Producto no encontrado');
             alert('Error', error.response?.data?.message || 'Producto no encontrado');
             return null;
         }
@@ -48,7 +46,6 @@ const Venta = () => {
             }
             setProductId('');
         } else {
-            Alert.alert('Error', 'Por favor ingrese un ID de producto válido');
             alert('Error', 'Por favor ingrese un ID de producto válido');
         }
     };
@@ -91,7 +88,6 @@ const Venta = () => {
 
             await generateTicketPDF(ticketData); // Generar PDF 
 
-            Alert.alert('Éxito', `Ticket creado exitosamente con ID: ${ticketId}`);
             alert('Éxito', `Ticket creado exitosamente con ID: ${ticketId}`);
 
             setProducts([]);
@@ -157,7 +153,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 20,
-        backgroundColor: '#5c646b', // Fondo blanco tirando a amarillo claro
+        backgroundColor: '#5c646b',
     },
     title: {
         fontSize: 20,

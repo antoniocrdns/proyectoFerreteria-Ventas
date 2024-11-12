@@ -21,8 +21,7 @@ const Tickets = () => {
             setProductos(response.data.filter(producto => producto.activo)); 
         } catch (error) {
             console.error("Error fetching products:", error);
-            Alert.alert("No se pudieron cargar los productos.");
-            alert("No se pudieron cargar los productos.");  // Versión para navegador
+            alert("No se pudieron cargar los productos.");
         }
     };
 
@@ -41,7 +40,7 @@ const Tickets = () => {
             const newTickets = response.data.sort((a, b) => a.ticket_id - b.ticket_id);
 
             if (newTickets.length === 0) {
-                setAllLoaded(true); // No hay más tickets para cargar
+                setAllLoaded(true);
             } else {
                 const uniqueTickets = [
                     ...tickets,
@@ -54,8 +53,7 @@ const Tickets = () => {
             }
         } catch (error) {
             console.error("Error fetching tickets:", error);
-            Alert.alert("No se pudieron cargar los tickets.");
-            alert("No se pudieron cargar los tickets.");  // Versión para navegador
+            alert("No se pudieron cargar los tickets.");
         } finally {
             setLoading(false);
         }
@@ -75,33 +73,28 @@ const Tickets = () => {
         setSelectedTicket(null);
     };
 
-    // Función para abrir el modal de confirmación de cancelación
     const openCancelModal = (ticketId) => {
         setTicketToCancel(ticketId);
         setShowCancelModal(true);
     };
 
-    // Función para confirmar la cancelación
     const confirmCancelTicket = async () => {
         try {
             await axios.delete(`http://127.0.0.1:3000/api/tickets/${ticketToCancel}`);
-            Alert.alert("Ticket cancelado.");
-            alert("Ticket cancelado.");  // Versión para navegador
+            alert("Ticket cancelado con exito.");
             setTickets(tickets => tickets.map(ticket => 
                 ticket.ticket_id === ticketToCancel ? { ...ticket, cancelada: 1 } : ticket
             ));
         } catch (error) {
             console.error("Error canceling ticket:", error);
-            Alert.alert("No se pudo cancelar el ticket.");
-            alert("No se pudo cancelar el ticket.");  // Versión para navegador
+            alert("No se pudo cancelar el ticket.");
         } finally {
-            setShowCancelModal(false);  // Cierra el modal después de la cancelación
+            setShowCancelModal(false);
         }
     };
 
     const crearTicket = async () => {
         if (productos.length === 0) {
-            Alert.alert("No se pueden crear tickets", "Debe haber al menos un producto activo en el inventario.");
             alert("No se pueden crear tickets. Debe haber al menos un producto activo en el inventario.");  // Versión para navegador
             return;
         }
@@ -133,12 +126,10 @@ const Tickets = () => {
                 });
             }));
 
-            Alert.alert("Ticket creado con éxito.");
-            alert("Ticket creado con éxito.");  // Versión para navegador
+            alert("Ticket creado con éxito.");
         } catch (error) {
             console.error("Error creating ticket:", error);
-            Alert.alert("No se pudo crear el ticket.");
-            alert("No se pudo crear el ticket.");  // Versión para navegador
+            alert("No se pudo crear el ticket.");
         }
     };
 
