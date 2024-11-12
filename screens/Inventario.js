@@ -77,7 +77,7 @@ const Inventario = () => {
         if (!validarCampos(producto, false)) return;
 
         try {
-            await axios.put(`${BASE_URL}/${id}`, producto, {
+            await axios.put(`${BASE_URL}/${id}`, producto,  {
                 headers: { 'Content-Type': 'application/json' },
             });
             setEditando(null);
@@ -223,6 +223,7 @@ const Inventario = () => {
         </ScrollView>
     );
 };
+
 
 
 const styles = StyleSheet.create({
