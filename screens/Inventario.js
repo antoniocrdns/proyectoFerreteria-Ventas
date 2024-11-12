@@ -120,14 +120,14 @@ const Inventario = () => {
                         style={styles.input} 
                         placeholder="Precio" 
                         value={precio} 
-                        onChangeText={(text) => setPrecio(text ? parseFloat(text) : '')}
+                        onChangeText={setPrecio}
                         keyboardType="numeric"
                     />
                     <TextInput 
                         style={styles.input} 
                         placeholder="Cantidad" 
                         value={cantidad} 
-                        onChangeText={(text) => setCantidad(text ? parseInt(text) : '')}
+                        onChangeText={setCantidad}
                         keyboardType="numeric"
                     />
                     <View style={styles.switchContainer}>
@@ -145,7 +145,7 @@ const Inventario = () => {
         } else {
             return (
                 <View style={styles.productItem}>
-                    <Text style={styles.productText}>ID: {item.id}</Text> {/* Mostrar el ID del producto */}
+                    <Text style={styles.productText}>ID: {item.id}</Text>
                     <Text style={styles.productText}>{item.nombre}</Text>
                     <Text style={styles.productText}>Proveedor: {item.proveedor}</Text>
                     <Text style={styles.productText}>Precio: ${item.precio}</Text>
@@ -192,14 +192,14 @@ const Inventario = () => {
                             style={styles.input} 
                             placeholder="Precio" 
                             value={precio} 
-                            onChangeText={(text) => setPrecio(text ? parseFloat(text) : '')}
+                            onChangeText={setPrecio}
                             keyboardType="numeric"
                         />
                         <TextInput 
                             style={styles.input} 
                             placeholder="Cantidad" 
                             value={cantidad} 
-                            onChangeText={(text) => setCantidad(text ? parseInt(text) : '')}
+                            onChangeText={setCantidad}
                             keyboardType="numeric"
                         />
                         <View style={styles.switchContainer}>
@@ -223,6 +223,7 @@ const Inventario = () => {
         </ScrollView>
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {
