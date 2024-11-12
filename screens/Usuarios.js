@@ -317,7 +317,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     header: {
-        fontSize: 24,
+        fontSize: 20,
         fontWeight: 'bold',
         color: 'white',
         marginBottom: 20,
