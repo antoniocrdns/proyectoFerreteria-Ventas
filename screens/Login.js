@@ -77,15 +77,13 @@ const Login = () => {
 
 const styles = StyleSheet.create({
     container: {
-        display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    height: '100vh',
-    padding: '20px',
-    backgroundColor: '#5c646b',
+        flex: 1,
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: 20,
+        backgroundColor: '#5c646b',
     },
-    
     logo: {
         width: 12,
         height: 120,
@@ -122,9 +120,7 @@ const styles = StyleSheet.create({
 
     // Borde redondeado
     borderRadius: 12,
-           
     },
-      
     loginButton: {
         backgroundColor: '#d17609',
         width: '90%',           // Ajuste de ancho para mantenerlo compacto
