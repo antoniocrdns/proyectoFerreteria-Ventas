@@ -54,30 +54,39 @@ const Inventario = () => {
         setError('');
         return true;
     };
+    const limpiarCampos = () => {
+        setId('');
+        setNombre('');
+        setProveedor('');
+        setPrecio('');
+        setCantidad('');
+        setActivo(true);
+    };
 
     const registrarProducto = async () => {
-        const producto = { id, nombre, proveedor, precio: parseFloat(precio), cantidad: parseInt(cantidad), activo: activo ? 1 : 0 };
-        if (!validarCampos(producto)) return;
+    const producto = { id, nombre, proveedor, precio: parseFloat(precio), cantidad: parseInt(cantidad), activo: activo ? 1 : 0 };
+    if (!validarCampos(producto)) return;
 
-        try {
-            await axios.post(BASE_URL, producto, {
-                headers: { 'Content-Type': 'application/json' },
-            });
-            setMostrarFormulario(false);
-            obtenerProductos();
-            Alert.alert("Éxito", "Producto agregado correctamente.");
-        } catch (error) {
-            console.error(error);
-            Alert.alert("Error", "No se pudo registrar el producto.");
-        }
-    };
+    try {
+        await axios.post(BASE_URL, producto, {
+            headers: { 'Content-Type': 'application/json' },
+        });
+        setMostrarFormulario(false);
+        obtenerProductos();
+        limpiarCampos();
+        Alert.alert("Éxito", "Producto agregado correctamente.");
+    } catch (error) {
+        console.error(error);
+        Alert.alert("Error", "No se pudo registrar el producto.");
+    }
+};
 
     const actualizarProducto = async () => {
         const producto = { id, nombre, proveedor, precio: parseFloat(precio), cantidad: parseInt(cantidad), activo: activo ? 1 : 0 };
         if (!validarCampos(producto, false)) return;
 
         try {
-            await axios.put(`${BASE_URL}/${id}`, producto,  {
+            await axios.put(`${BASE_URL}/${id}`, producto, {
                 headers: { 'Content-Type': 'application/json' },
             });
             setEditando(null);
@@ -163,7 +172,7 @@ const Inventario = () => {
         <ScrollView style={styles.container}>
             <View>
                 <Text style={styles.header}>Inventario de Productos</Text>
-                <TouchableOpacity style={styles.addButton} onPress={() => setMostrarFormulario(!mostrarFormulario)}>
+                <TouchableOpacity style={styles.addButton} onPress={() =>{limpiarCampos(); setMostrarFormulario(!mostrarFormulario); }}>
                     <Text style={styles.buttonText}>Añadir Producto</Text>
                 </TouchableOpacity>
                 {mostrarFormulario && (
@@ -223,8 +232,6 @@ const Inventario = () => {
         </ScrollView>
     );
 };
-
-
 
 const styles = StyleSheet.create({
     container: {
