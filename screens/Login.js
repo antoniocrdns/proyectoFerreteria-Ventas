@@ -28,12 +28,10 @@ const Login = () => {
                 const token = response.data.token;
                 login(userRole);
                 setAuthToken(token);
-                navigation.navigate("Venta");
             }
         } catch (error) {
-            const errorMessage = error.response?.data?.message || "Usuario o contraseña incorrectos";
-            Alert.alert("Error", errorMessage);
-            alert("Error", errorMessage);
+            alert("Error: Usuario o contraseña incorrectos");
+            console.log(error.response?.data?.message)
         } finally {
             setLoading(false);
         }
