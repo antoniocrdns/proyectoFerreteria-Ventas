@@ -14,12 +14,13 @@ const Venta = () => {
             const product = response.data;
 
             if (product.activo !== 1 || product.cantidad <= 0) {
-                alert('Error. Producto inactivo o sin stock disponible');
+                alert('Error: Producto inactivo o sin stock disponible');
                 return null;
             }
             return product;
         } catch (error) {
-            alert('Error', error.response?.data?.message || 'Producto no encontrado');
+            alert('Error: Producto no encontrado');
+            console.log(error.response?.data?.message)
             return null;
         }
     };
@@ -28,6 +29,11 @@ const Venta = () => {
         if (productId) {
             const existingProduct = products.find(p => p.producto_id === productId);
             if (existingProduct) {
+                const product = await getProductById(productId);
+                if (product && existingProduct.cantidad + 1 > product.cantidad) {
+                    alert('Error: No hay suficiente inventario para agregar más de este producto.');
+                    return;
+                }
                 setProducts(products.map(p =>
                     p.producto_id === productId
                         ? { ...p, cantidad: p.cantidad + 1 }
@@ -37,16 +43,17 @@ const Venta = () => {
                 const product = await getProductById(productId);
                 if (product) {
                     setProducts([...products, {
-                        producto_id: product.id,           
-                        nombre: product.nombre,              
-                        cantidad: 1,                          
-                        precio_unitario: product.precio       
+                        producto_id: product.id,
+                        nombre: product.nombre,
+                        cantidad: 1,
+                        precio_unitario: product.precio,
+                        inventario: product.cantidad
                     }]);
                 }
             }
             setProductId('');
         } else {
-            alert('Error', 'Por favor ingrese un ID de producto válido');
+            alert('Error: Por favor ingrese un ID de producto válido');
         }
     };
 
@@ -54,12 +61,25 @@ const Venta = () => {
         setProducts(products.filter(p => p.producto_id !== id));
     };
 
-    const updateQuantity = (id, increment) => {
-        setProducts(products.map(p =>
-            p.producto_id === id
-                ? { ...p, cantidad: Math.max(0, p.cantidad + increment) }
-                : p
-        ));
+    const updateQuantity = async (id, increment) => {
+        const productToUpdate = products.find(p => p.producto_id === id);
+
+        if (productToUpdate) {
+            const newQuantity = productToUpdate.cantidad + increment;
+            if (newQuantity < 0) {
+                alert('Error: No se puede tener una cantidad negativa.');
+                return;
+            }
+            if (newQuantity > productToUpdate.inventario) {
+                alert('Error: No hay suficiente inventario para esta cantidad.');
+                return;
+            }
+            setProducts(products.map(p =>
+                p.producto_id === id
+                    ? { ...p, cantidad: newQuantity }
+                    : p
+            ));
+        }
     };
 
     const calculateTotals = () => {
@@ -88,19 +108,13 @@ const Venta = () => {
 
             await generateTicketPDF(ticketData); // Generar PDF 
 
-            alert('Éxito', `Ticket creado exitosamente con ID: ${ticketId}`);
+            alert(`Ticket creado exitosamente con ID: ${ticketId}`);
 
             setProducts([]);
             setProductId('');
         } catch (error) {
-            Alert.alert(
-                'Error',
-                error.response?.data?.message || 'Hubo un problema al crear el ticket. Inténtalo de nuevo.'
-            );
-            alert(
-                'Error',
-                error.response?.data?.message || 'Hubo un problema al crear el ticket. Inténtalo de nuevo.'
-            );
+            alert('Error: Hubo un problema al crear el ticket. Inténtalo de nuevo.');
+            console.log(error.response?.data?.message);
         }
     };
 
