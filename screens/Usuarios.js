@@ -9,7 +9,7 @@ const Usuarios = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [rol_id, setRol] = useState("");
-    const [roles, setRoles] = useState([]);  // Nuevo estado para almacenar los roles
+    const [roles, setRoles] = useState([]);  //nuevo estado para almacenar los roles
     const [editingUserId, setEditingUserId] = useState(null);
     const [tableData, setTableData] = useState([]);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -124,15 +124,26 @@ const Usuarios = () => {
         setShowDeleteModal(true);  // aqui abre el modal de confirmar si se elimina el usuario
     };
 
+   
+   
     const confirmarBorrado = async () => {
         if (userToDelete) {
+            //encuentra el usuario que tiene el ID `userToDelete` en la lista de usuarios
+            const usuario = usuarios.find(u => u.id === userToDelete);
+    
+            //verifica si el rol del usuario es 'admin' (rol_id = 1)
+            if (usuario && usuario.rol_id === 1) {
+                Alert.alert("Error no se puede eliminar al usuario administrador.");
+                return; 
+            }
+    
             try {
                 await axios.delete(`${apiUrlUsuarios}/${userToDelete}`);
-                Alert.alert("Usuario eliminado", "El usuario ha sido eliminado correctamente.");
+                Alert.alert("Usuario eliminado el usuario ha sido eliminado correctamente.");
                 alert("Usuario eliminado");
                 verListaUsuarios();
             } catch (error) {
-                Alert.alert("Error", "No se pudo eliminar el usuario");
+                Alert.alert("Error no se pudo eliminar el usuario");
                 alert("Error", "No se pudo eliminar el usuario");
             }
         }
