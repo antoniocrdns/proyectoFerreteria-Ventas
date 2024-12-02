@@ -10,6 +10,7 @@ import Venta from "./screens/Venta";
 import Usuarios from "./screens/Usuarios";
 import Login from "./screens/Login";
 import Tickets from "./screens/Tickets";
+import Load from "./screens/Load";
 
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { TouchableOpacity, Text } from "react-native";
@@ -21,7 +22,7 @@ function MyTabs() {
 
     return (
         <Tab.Navigator
-            initialRouteName="Login"
+            initialRouteName="Load"
             screenOptions={({ route }) => ({
                 tabBarActiveTintColor: 'orange',
                 headerRight: () =>
@@ -32,6 +33,15 @@ function MyTabs() {
                     ) : null,
             })}
         >
+            <Tab.Screen 
+                name="Load" 
+                component={Load} 
+                options={{
+                    tabBarStyle: { display: 'none' },
+                    headerShown: false,
+                    tabBarButton: () => null, // Oculta el botón de la pestaña
+                }} 
+            />
             {!userRole && (
                 <Tab.Screen 
                     name="Login" 
